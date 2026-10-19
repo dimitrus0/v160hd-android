@@ -8,45 +8,114 @@
     :root {
       --bg-dark: #121418;
       --bg-panel: #1a1d24;
+      --bg-card: #222630;
       --border-color: #333a48;
+      --border-light: #434c5e;
       --text-main: #e2e8f0;
       --text-muted: #94a3b8;
+      
       --tally-pgm: #ff3333;
-      --tally-pgm-glow: rgba(255, 51, 51, 0.7);
+      --tally-pgm-glow: rgba(255, 51, 51, 0.75);
       --tally-pst: #10b981;
-      --tally-pst-glow: rgba(16, 185, 129, 0.7);
+      --tally-pst-glow: rgba(16, 185, 129, 0.75);
+      --tally-aux: #f59e0b;
+      --tally-aux-glow: rgba(245, 158, 11, 0.75);
+      --tally-key: #06b6d4;
+      
       --roland-red: #da291c;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+
+    /* HEADER */
+    header { background: linear-gradient(180deg, #20242d 0%, #171920 100%); border-bottom: 2px solid #2d3341; padding: 10px 20px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+    .brand-section { display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 1.25rem; letter-spacing: 2px; color: #fff; }
+    .brand-section span { background: var(--roland-red); padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; }
     
-    header { background: #1c202a; border-bottom: 2px solid #2d3341; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
-    .brand-logo { font-weight: 900; font-size: 1.2rem; letter-spacing: 2px; color: #fff; }
-    .brand-logo span { background: var(--roland-red); padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; }
-    
-    .conn-bar { display: flex; align-items: center; gap: 8px; background: var(--bg-panel); padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-color); }
-    .conn-bar input { background: #0f1115; border: 1px solid var(--border-color); color: #fff; padding: 4px 8px; border-radius: 4px; font-family: monospace; width: 110px; }
-    
-    .btn { background: #2a303c; color: #e2e8f0; border: 1px solid #475569; padding: 6px 12px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
+    .conn-bar { display: flex; align-items: center; gap: 8px; background: var(--bg-panel); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border-color); flex-wrap: wrap; }
+    .conn-bar label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    .conn-bar input, .conn-bar select { background: #0f1115; border: 1px solid var(--border-color); color: #fff; padding: 4px 8px; border-radius: 4px; font-family: monospace; font-size: 0.85rem; }
+    .conn-bar input[type="text"] { width: 120px; }
+    .conn-bar input[type="number"] { width: 65px; }
+
+    .btn { background: #2a303c; color: #e2e8f0; border: 1px solid var(--border-light); padding: 6px 12px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: all 0.15s; }
+    .btn:hover { background: #363d4d; }
     .btn-primary { background: #2563eb; border-color: #3b82f6; color: white; }
     .btn-danger { background: #b91c1c; border-color: #ef4444; color: white; }
+    
+    .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
+    .status-offline { background: #374151; color: #9ca3af; }
+    .status-online { background: #064e3b; color: #34d399; }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
 
-    main { padding: 18px 20px; max-width: 1400px; margin: 0 auto; width: 100%; display: grid; grid-template-columns: 1fr 300px; gap: 20px; }
-    @media (max-width: 1050px) { main { grid-template-columns: 1fr; } }
+    /* TAB NAVIGATION */
+    .tab-bar { display: flex; background: #171920; border-bottom: 1px solid var(--border-color); padding: 0 20px; gap: 4px; overflow-x: auto; }
+    .tab-btn { background: transparent; border: none; color: var(--text-muted); padding: 10px 18px; font-size: 0.85rem; font-weight: 700; cursor: pointer; border-bottom: 3px solid transparent; }
+    .tab-btn.active { color: #fff; border-bottom-color: var(--roland-red); background: #1f232c; }
+
+    main { flex: 1; padding: 18px 20px; max-width: 1550px; margin: 0 auto; width: 100%; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    .console-layout { display: grid; grid-template-columns: 1fr 340px; gap: 20px; }
+    @media (max-width: 1200px) { .console-layout { grid-template-columns: 1fr; } }
 
     .panel-box { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; margin-bottom: 16px; }
-    .bus-title { font-size: 0.8rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
-    
+    .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .panel-title { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
+
+    /* 3-TIER CROSSPOINT BUTTONS */
+    .bus-container { margin-bottom: 14px; }
+    .bus-name { font-size: 0.8rem; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; display: block; }
     .crosspoint-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px; }
-    .xp-btn { background: linear-gradient(180deg, #2a2f3a 0%, #1e222a 100%); border: 1px solid #3c4454; border-radius: 6px; padding: 12px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; min-height: 58px; }
-    .xp-num { font-size: 1rem; font-weight: 900; }
-    .xp-name { font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; margin-top: 2px; }
+    @media (max-width: 900px) { .crosspoint-grid { grid-template-columns: repeat(5, 1fr); } }
 
-    .bus-pgm .xp-btn.active { background: linear-gradient(180deg, #e11d48 0%, #be123c 100%); border-color: #fda4af; box-shadow: 0 0 15px var(--tally-pgm-glow); color: #fff; }
-    .bus-pst .xp-btn.active { background: linear-gradient(180deg, #059669 0%, #047857 100%); border-color: #6ee7b7; box-shadow: 0 0 15px var(--tally-pst-glow); color: #fff; }
+    .xp-btn {
+      background: linear-gradient(180deg, #2a2f3a 0%, #1e222a 100%);
+      border: 1px solid #3c4454;
+      border-radius: 6px;
+      padding: 8px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      min-height: 64px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+      transition: all 0.1s;
+    }
+    .xp-btn:active { transform: translateY(2px); }
 
-    /* FIXED T-BAR CSS: 0% BOTTOM -> 100% TOP */
+    .xp-num { font-size: 1.15rem; font-weight: 900; line-height: 1; color: #fff; }
+    .xp-name { font-size: 0.72rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; margin-top: 3px; letter-spacing: 0.5px; white-space: nowrap; }
+    .xp-sub { font-size: 0.58rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-top: 1px; }
+
+    /* ACTIVE ILLUMINATED TALLIES */
+    .bus-pgm .xp-btn.active {
+      background: linear-gradient(180deg, #e11d48 0%, #be123c 100%);
+      border-color: #fda4af;
+      box-shadow: 0 0 15px var(--tally-pgm-glow);
+    }
+    .bus-pst .xp-btn.active {
+      background: linear-gradient(180deg, #059669 0%, #047857 100%);
+      border-color: #6ee7b7;
+      box-shadow: 0 0 15px var(--tally-pst-glow);
+    }
+    .bus-aux .xp-btn.active {
+      background: linear-gradient(180deg, #d97706 0%, #b45309 100%);
+      border-color: #fcd34d;
+      box-shadow: 0 0 15px var(--tally-aux-glow);
+    }
+
+    .bus-pgm .xp-btn.active .xp-name, .bus-pgm .xp-btn.active .xp-sub,
+    .bus-pst .xp-btn.active .xp-name, .bus-pst .xp-btn.active .xp-sub,
+    .bus-aux .xp-btn.active .xp-name, .bus-aux .xp-btn.active .xp-sub {
+      color: #ffffff;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    }
+
+    /* T-BAR */
     .tbar-wrapper { display: flex; flex-direction: column; align-items: center; background: #14171d; border-radius: 8px; padding: 16px; border: 1px solid var(--border-color); }
     .tbar-track { width: 44px; height: 240px; background: #090a0d; border-radius: 22px; border: 2px solid #282d38; position: relative; cursor: pointer; }
     .tbar-progress { position: absolute; bottom: 0; left: 12px; right: 12px; background: linear-gradient(0deg, var(--roland-red) 0%, #f59e0b 100%); border-radius: 8px; pointer-events: none; height: 0%; }
@@ -54,149 +123,366 @@
 
     .trans-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 14px; }
     .btn-cut { background: #b91c1c; color: white; height: 55px; font-size: 1.1rem; font-weight: 900; border: none; border-radius: 6px; cursor: pointer; }
+    .btn-cut.flashing { background: #ef4444; box-shadow: 0 0 20px #ef4444; }
     .btn-auto { background: #1d4ed8; color: white; height: 55px; font-size: 1.1rem; font-weight: 900; border: none; border-radius: 6px; cursor: pointer; }
+    .btn-auto.active { background: #3b82f6; box-shadow: 0 0 20px #3b82f6; }
 
-    /* CLEAN AUDIO FADER (NO JITTER) */
-    .audio-fader-card { display: flex; align-items: center; gap: 14px; background: #14171d; border-radius: 8px; padding: 12px 16px; margin-top: 10px; }
-    .fader-vertical { writing-mode: vertical-lr; direction: rtl; width: 28px; height: 160px; accent-color: #3b82f6; cursor: pointer; }
-    .db-scale { display: flex; flex-direction: column; justify-content: space-between; height: 160px; font-family: monospace; font-size: 0.75rem; color: #64748b; font-weight: 700; }
+    /* CALIBRATED AUDIO (ZERO JITTER) */
+    .audio-strip-container { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 12px; }
+    .audio-channel { background: #161920; border: 1px solid var(--border-color); border-radius: 8px; width: 105px; flex-shrink: 0; padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .audio-channel.master { background: #1e1b2e; border-color: #6366f1; }
+    .fader-box { display: flex; align-items: center; gap: 8px; }
+    .fader-vertical { writing-mode: vertical-lr; direction: rtl; width: 24px; height: 170px; accent-color: #3b82f6; cursor: pointer; }
+    .db-scale { display: flex; flex-direction: column; justify-content: space-between; height: 170px; font-family: monospace; font-size: 0.68rem; color: #64748b; font-weight: 700; }
     .db-scale span.unity { color: #10b981; }
+
+    /* CARDS & DPAD */
+    .layers-grid, .preset-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+    .layer-card { background: #15181f; border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; }
+    .toggle-btn { flex: 1; padding: 6px 4px; border-radius: 4px; border: 1px solid var(--border-color); background: #20242e; color: #94a3b8; font-size: 0.75rem; font-weight: 800; cursor: pointer; text-align: center; }
+    .toggle-btn.pvw-active { background: #047857; color: white; border-color: #34d399; }
+    .toggle-btn.pgm-active { background: #b91c1c; color: white; border-color: #f87171; }
+
+    .preset-btn { background: #1c202a; border: 1px solid #333a4a; border-radius: 6px; padding: 12px 8px; text-align: center; cursor: pointer; }
+    .preset-btn.active-mem { background: #1e3a8a; border-color: #60a5fa; box-shadow: 0 0 12px rgba(96,165,250,0.4); }
+
+    .ptz-dpad { width: 190px; height: 190px; background: #14171d; border: 2px solid var(--border-color); border-radius: 50%; margin: 0 auto; position: relative; }
+    .ptz-btn { position: absolute; background: #252a36; border: 1px solid var(--border-light); color: white; width: 44px; height: 44px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.1rem; }
+    .ptz-up { top: 8px; left: 73px; } .ptz-down { bottom: 8px; left: 73px; } .ptz-left { left: 8px; top: 73px; } .ptz-right { right: 8px; top: 73px; } .ptz-center { top: 73px; left: 73px; border-radius: 50%; font-size: 0.65rem; font-weight: 800; }
+
+    .term-logs { background: #090b0e; border: 1px solid #20242e; border-radius: 6px; height: 280px; overflow-y: auto; padding: 10px; font-family: monospace; font-size: 0.8rem; display: flex; flex-direction: column; gap: 4px; }
+    .log-tx { color: #38bdf8; } .log-rx { color: #4ade80; } .log-sys { color: #fbbf24; }
   </style>
 </head>
 <body>
 
   <header>
-    <div class="brand-logo">ROLAND <span>V-160HD</span> REMOTE</div>
+    <div class="brand-section">
+      ROLAND <span>V-160HD</span> REMOTE
+    </div>
+
     <div class="conn-bar">
-      <input type="text" id="hostInput" value="127.0.0.1">
-      <input type="number" id="portInput" value="8024" style="width: 60px;">
-      <input type="password" id="pinInput" placeholder="PIN" style="width: 55px;" maxlength="4">
+      <label>Mode</label>
+      <select id="connModeSelect" onchange="handleModeChange()">
+        <option value="direct">Native App (TCP 8023)</option>
+        <option value="ws">WebSocket Bridge</option>
+      </select>
+
+      <label>Switcher IP</label>
+      <input type="text" id="hostInput" value="192.168.1.100">
+      <label>Port</label>
+      <input type="number" id="portInput" value="8023">
+      <label>PIN</label>
+      <input type="password" id="pinInput" placeholder="0000" maxlength="4" style="width: 55px;">
+
       <button id="connectBtn" class="btn btn-primary" onclick="toggleConnection()">Connect</button>
       <button class="btn" onclick="syncBankFromSwitcher()">Sync Bank</button>
-      <span id="statusText" style="font-size:0.75rem; font-weight:800; color:#94a3b8;">DISCONNECTED</span>
+
+      <div id="statusBadge" class="status-badge status-offline">
+        <span class="status-dot"></span>
+        <span id="statusText">DISCONNECTED</span>
+      </div>
     </div>
   </header>
 
+  <!-- NAVIGATION TABS -->
+  <nav class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('switcherTab', this)">🎛️ Switcher Surface</button>
+    <button class="tab-btn" onclick="switchTab('layersTab', this)">🖼️ PinP & DSK Layers</button>
+    <button class="tab-btn" onclick="switchTab('audioTab', this)">🎚️ Audio Mixer</button>
+    <button class="tab-btn" onclick="switchTab('ptzTab', this)">📹 PTZ Cameras</button>
+    <button class="tab-btn" onclick="switchTab('presetsTab', this)">💾 Memories & Macros</button>
+    <button class="tab-btn" onclick="switchTab('routingTab', this)">🔀 Matrix Output</button>
+    <button class="tab-btn" onclick="switchTab('terminalTab', this)">💻 LAN Terminal & Logs</button>
+  </nav>
+
   <main>
-    <div>
-      <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom: 12px;">
-        <div style="display:flex; gap: 8px;">
-          <button id="b1" class="btn btn-primary" onclick="setBank(1)">Bank 1 (1–10)</button>
-          <button id="b2" class="btn" onclick="setBank(2)">Bank 2 (11–20)</button>
+    <!-- TAB 1: SWITCHER SURFACE -->
+    <div id="switcherTab" class="tab-content active">
+      <div class="console-layout">
+        <div>
+          <!-- BANK SELECTOR -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div style="display: flex; gap: 8px;">
+              <button id="b1" class="btn btn-primary" onclick="setBank(1)">Bank 1 (1–10)</button>
+              <button id="b2" class="btn" onclick="setBank(2)">Bank 2 (11–20)</button>
+            </div>
+            <div style="font-size: 0.8rem; color: #94a3b8;">
+              <span id="syncIndicator">⚡ Auto-Sync Active</span> | Inputs <strong id="bankRangeText">1 – 10</strong>
+            </div>
+          </div>
+
+          <!-- PGM BUS -->
+          <div class="panel-box bus-container bus-pgm">
+            <span class="bus-name" style="color:var(--tally-pgm);">● PROGRAM (PGM / A-BUS) [ON AIR]</span>
+            <div class="crosspoint-grid" id="pgmGrid"></div>
+          </div>
+
+          <!-- PST BUS -->
+          <div class="panel-box bus-container bus-pst">
+            <span class="bus-name" style="color:var(--tally-pst);">● PRESET (PST / B-BUS) [PREVIEW]</span>
+            <div class="crosspoint-grid" id="pstGrid"></div>
+          </div>
+
+          <!-- AUX BUS -->
+          <div class="panel-box bus-container bus-aux">
+            <span class="bus-name" style="color:var(--tally-aux);">● AUXILIARY (AUX 1 BUS)</span>
+            <div class="crosspoint-grid" id="auxGrid"></div>
+          </div>
+
+          <!-- QUICK DOCK -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="panel-box" style="margin-bottom:0;">
+              <div class="panel-title" style="margin-bottom: 8px;">PinP Quick Status</div>
+              <div style="display:flex; gap:6px;">
+                <button id="qPinp1" class="toggle-btn" onclick="togglePinp(1)">PinP 1: OFF</button>
+                <button id="qPinp2" class="toggle-btn" onclick="togglePinp(2)">PinP 2: OFF</button>
+                <button id="qPinp3" class="toggle-btn" onclick="togglePinp(3)">PinP 3: OFF</button>
+                <button id="qPinp4" class="toggle-btn" onclick="togglePinp(4)">PinP 4: OFF</button>
+              </div>
+            </div>
+            <div class="panel-box" style="margin-bottom:0;">
+              <div class="panel-title" style="margin-bottom: 8px;">DSK & Freeze Quick Status</div>
+              <div style="display:flex; gap:6px;">
+                <button id="qDsk1" class="toggle-btn" onclick="toggleDsk(1)">DSK 1: OFF</button>
+                <button id="qDsk2" class="toggle-btn" onclick="toggleDsk(2)">DSK 2: OFF</button>
+                <button id="qFreeze" class="toggle-btn" onclick="toggleFreeze()">FREEZE: OFF</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TRANSITION / T-BAR BLOCK -->
+        <div class="panel-box tbar-wrapper">
+          <div class="panel-title" style="margin-bottom: 12px;">Transition Block</div>
+          
+          <div class="tbar-track" id="tbarTrack">
+            <div class="tbar-progress" id="tbarProgress"></div>
+            <div class="tbar-handle" id="tbarHandle"></div>
+          </div>
+
+          <div style="font-family: monospace; font-size: 0.85rem; margin-top: 12px; font-weight: 700;">
+            POS: <span id="tbarPosText">0%</span>
+          </div>
+
+          <div class="trans-actions">
+            <button id="cutBtn" class="btn-cut" onclick="executeCut()">CUT</button>
+            <button id="autoBtn" class="btn-auto" onclick="executeAuto()">AUTO</button>
+          </div>
+
+          <div style="width: 100%; margin-top: 14px; background: #161922; padding: 10px; border-radius: 6px;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 6px;">
+              <span>Time: <strong id="transTimeText">1.0s</strong></span>
+              <select id="mixTypeSelect" onchange="setMixType(this.value)" style="background:#090a0d; color:#fff; border:1px solid #333a4a; font-size:0.75rem;">
+                <option value="0">MIX</option>
+                <option value="1">WIPE</option>
+              </select>
+            </div>
+            <input type="range" min="0" max="40" value="10" oninput="setTransTime(this.value)" style="width: 100%;">
+          </div>
+
+          <button id="ftbBtn" class="btn" style="width: 100%; margin-top: 12px; background: #261b1f; color: #ef4444; border-color: #ef4444;" onclick="toggleFTB()">
+            ⬛ OUTPUT FADE (BLACK)
+          </button>
         </div>
       </div>
+    </div>
 
-      <!-- PGM -->
-      <div class="panel-box bus-pgm">
-        <div class="bus-title" style="color:var(--tally-pgm);">● PROGRAM (ON AIR)</div>
-        <div class="crosspoint-grid" id="pgmGrid"></div>
-      </div>
-
-      <!-- PST -->
-      <div class="panel-box bus-pst">
-        <div class="bus-title" style="color:var(--tally-pst);">● PRESET (PREVIEW)</div>
-        <div class="crosspoint-grid" id="pstGrid"></div>
-      </div>
-
-      <!-- AUDIO MASTER STRIP (CLEAN) -->
+    <!-- TAB 2: PinP & DSK LAYERS -->
+    <div id="layersTab" class="tab-content">
       <div class="panel-box">
-        <div class="bus-title">Master Output Audio Level</div>
-        <div class="audio-fader-card">
-          <input type="range" class="fader-vertical" min="0" max="100" value="80" oninput="updateMasterAudio(this.value)">
-          <div class="db-scale">
-            <span style="color:#ef4444;">+10 dB</span>
-            <span>+6 dB</span>
-            <span class="unity">0 dB (Unity)</span>
-            <span>-6 dB</span>
-            <span>-12 dB</span>
-            <span>-20 dB</span>
-            <span>-40 dB</span>
-            <span>-∞ dB</span>
+        <div class="panel-header"><span class="panel-title">Picture-in-Picture (PinP 1–4)</span></div>
+        <div class="layers-grid" id="pinpGrid"></div>
+      </div>
+      <div class="panel-box" style="margin-top:16px;">
+        <div class="panel-header"><span class="panel-title">Downstream Keyers (DSK 1–2)</span></div>
+        <div class="layers-grid" id="dskGrid"></div>
+      </div>
+    </div>
+
+    <!-- TAB 3: AUDIO MIXER (CALIBRATED, ZERO JITTER) -->
+    <div id="audioTab" class="tab-content">
+      <div class="panel-box">
+        <div class="panel-header">
+          <span class="panel-title">Digital Audio Console</span>
+          <span style="font-size:0.75rem; color:#94a3b8;">Calibrated Broadcast Scale</span>
+        </div>
+        <div class="audio-strip-container" id="audioStrips"></div>
+      </div>
+    </div>
+
+    <!-- TAB 4: PTZ CAMERAS -->
+    <div id="ptzTab" class="tab-content">
+      <div class="panel-box">
+        <div class="panel-header">
+          <span class="panel-title">Remote PTZ Camera Control</span>
+          <select id="ptzCamSel" onchange="activeCam=this.value" style="background:#0f1115; color:#fff; padding:4px 8px; border:1px solid #333a4a;">
+            <option value="1">Camera 1</option><option value="2">Camera 2</option><option value="3">Camera 3</option><option value="4">Camera 4</option>
+          </select>
+        </div>
+        <div style="display: grid; grid-template-columns: 240px 1fr; gap: 20px;">
+          <div class="ptz-dpad">
+            <button class="ptz-btn ptz-up" onmousedown="ptzMove('UP')" onmouseup="ptzMove('STOP')">▲</button>
+            <button class="ptz-btn ptz-down" onmousedown="ptzMove('DOWN')" onmouseup="ptzMove('STOP')">▼</button>
+            <button class="ptz-btn ptz-left" onmousedown="ptzMove('LEFT')" onmouseup="ptzMove('STOP')">◀</button>
+            <button class="ptz-btn ptz-right" onmousedown="ptzMove('RIGHT')" onmouseup="ptzMove('STOP')">▶</button>
+            <button class="ptz-btn ptz-center" onclick="ptzMove('HOME')">HOME</button>
           </div>
-          <div style="margin-left: 20px;">
-            <div style="font-size: 0.8rem; color:#94a3b8;">Current Output</div>
-            <div id="masterDbText" style="font-size: 1.3rem; font-weight: 900; color:#fff;">0.0 dB</div>
-            <button class="btn" style="margin-top: 10px;" onclick="toggleMasterMute()">Mute Master</button>
+          <div>
+            <div class="panel-title" style="margin-bottom:8px;">Camera Presets (1–10)</div>
+            <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;">
+              <button class="btn" onclick="ptzPreset(1)">Preset 1</button><button class="btn" onclick="ptzPreset(2)">Preset 2</button>
+              <button class="btn" onclick="ptzPreset(3)">Preset 3</button><button class="btn" onclick="ptzPreset(4)">Preset 4</button>
+              <button class="btn" onclick="ptzPreset(5)">Preset 5</button><button class="btn" onclick="ptzPreset(6)">Preset 6</button>
+              <button class="btn" onclick="ptzPreset(7)">Preset 7</button><button class="btn" onclick="ptzPreset(8)">Preset 8</button>
+              <button class="btn" onclick="ptzPreset(9)">Preset 9</button><button class="btn" onclick="ptzPreset(10)">Preset 10</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- TRANSITION / T-BAR -->
-    <div>
-      <div class="panel-box tbar-wrapper">
-        <div style="font-size:0.8rem; font-weight:800; color:#94a3b8; margin-bottom:12px;">TRANSITION BLOCK</div>
-        
-        <div class="tbar-track" id="tbarTrack">
-          <div class="tbar-progress" id="tbarProgress"></div>
-          <div class="tbar-handle" id="tbarHandle"></div>
+    <!-- TAB 5: MEMORIES & MACROS -->
+    <div id="presetsTab" class="tab-content">
+      <div class="panel-box">
+        <div class="panel-header">
+          <span class="panel-title">Preset Scene Memories (1–30)</span>
+          <span id="activeMemDisplay" style="color:#60a5fa; font-weight:800; font-size:0.8rem;">Current: Memory 1</span>
         </div>
-        
-        <div style="font-family: monospace; font-size: 0.85rem; margin-top: 12px;">
-          POS: <span id="tbarPosText">0%</span>
-        </div>
+        <div class="preset-grid" id="memGrid"></div>
+      </div>
+      <div class="panel-box" style="margin-top:16px;">
+        <div class="panel-header"><span class="panel-title">Macro Triggers (1–20)</span></div>
+        <div class="preset-grid" id="macroGrid"></div>
+      </div>
+    </div>
 
-        <div class="trans-actions">
-          <button class="btn-cut" onclick="executeCut()">CUT</button>
-          <button class="btn-auto" onclick="executeAuto()">AUTO</button>
+    <!-- TAB 6: OUTPUT ROUTING MATRIX -->
+    <div id="routingTab" class="tab-content">
+      <div class="panel-box">
+        <div class="panel-header"><span class="panel-title">Physical Output Routing Matrix</span></div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px;" id="matrixGrid"></div>
+      </div>
+    </div>
+
+    <!-- TAB 7: TERMINAL & LOGS -->
+    <div id="terminalTab" class="tab-content">
+      <div class="panel-box">
+        <div class="panel-header">
+          <span class="panel-title">Communications Log (TCP Port 8023)</span>
+          <button class="btn" onclick="document.getElementById('termLogs').innerHTML=''">Clear</button>
+        </div>
+        <div class="term-logs" id="termLogs"></div>
+        <div style="display:flex; gap:8px; margin-top:10px;">
+          <input type="text" id="rawCmdInput" placeholder="Send raw SysEx (e.g. DTH:002100,01; or VER;)" style="flex:1; background:#090a0d; color:#fff; border:1px solid #333a4a; padding:6px 10px; border-radius:4px; font-family:monospace;" onkeydown="if(event.key==='Enter') sendRawCmd()">
+          <button class="btn btn-primary" onclick="sendRawCmd()">Send</button>
         </div>
       </div>
     </div>
   </main>
 
   <script>
-    const inputLabels = Array.from({length: 20}, (_, i) => `IN ${i + 1}`);
+    // 1. Initialize with Roland V-160HD official hardware factory mapping
+    const inputLabels = [
+      "HDMI 1", "HDMI 2", "HDMI 3", "HDMI 4", "HDMI 5", "HDMI 6", "HDMI 7", "HDMI 8", "SDI 1", "SDI 2",
+      "SDI 3",  "SDI 4",  "SDI 5",  "SDI 6",  "SDI 7",  "SDI 8",  "STILL 1", "STILL 2", "STILL 3", "STILL 4"
+    ];
+
+    const outNames = ["PROGRAM", "SUB PROGRAM", "PREVIEW", "AUX 1", "AUX 2", "AUX 3", "DSK 1 SRC", "DSK 2 SRC", "MULTI-VIEW", "16 INPUT-VIEW", "16 STILL-VIEW"];
+    
     let currentBank = 1;
-    let pgm = 0, pst = 1;
+    let pgm = 0, pst = 1, aux = 2;
+    let activePreset = 0;
+    let freezeActive = false, ftbActive = false;
+    let activeCam = 1;
+    let isConnected = false;
+    let syncTimer = null;
     let ws = null;
+    let sseSource = null;
 
     window.addEventListener('DOMContentLoaded', () => {
       renderBuses();
+      renderLayers();
+      renderAudio();
+      renderPresets();
+      renderMatrix();
       setupTbar();
+
+      // Check if running inside Windows C# Desktop App (Port 18023)
+      if (window.location.port === "18023") {
+        document.getElementById('connModeSelect').value = "direct";
+        autoConnectDesktopApp();
+      }
     });
+
+    function switchTab(id, btn) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      btn.classList.add('active');
+    }
 
     function setBank(b) {
       currentBank = b;
       document.getElementById('b1').className = b === 1 ? 'btn btn-primary' : 'btn';
       document.getElementById('b2').className = b === 2 ? 'btn btn-primary' : 'btn';
+      document.getElementById('bankRangeText').innerText = b === 1 ? '1 – 10' : '11 – 20';
       renderBuses();
     }
 
+    // 3-Tier Crosspoint button rendering
     function renderBuses() {
       const pGrid = document.getElementById('pgmGrid');
       const sGrid = document.getElementById('pstGrid');
-      pGrid.innerHTML = ''; sGrid.innerHTML = '';
-      
+      const aGrid = document.getElementById('auxGrid');
+      pGrid.innerHTML = ''; sGrid.innerHTML = ''; aGrid.innerHTML = '';
+
       const offset = (currentBank - 1) * 10;
       for (let i = 0; i < 10; i++) {
-        const actualIdx = offset + i;
-        const name = inputLabels[actualIdx];
+        const actual = offset + i;
+        const physicalName = inputLabels[actual] || `INPUT ${actual + 1}`;
+        const slotName = `IN ${actual + 1}`;
+        const buttonNum = actual + 1;
 
-        const pBtn = document.createElement('div');
-        pBtn.className = `xp-btn ${pgm === actualIdx ? 'active' : ''}`;
-        pBtn.innerHTML = `<span class="xp-num">${actualIdx + 1}</span><span class="xp-name">${name}</span>`;
-        pBtn.onclick = () => { pgm = actualIdx; renderBuses(); sendCmd(`DTH:002100,${actualIdx.toString(16).padStart(2,'0')};`); };
-        pGrid.appendChild(pBtn);
+        pGrid.appendChild(makeXpBtn(buttonNum, physicalName, slotName, pgm === actual, () => {
+          pgm = actual; renderBuses();
+          sendCmd(`DTH:002100,${actual.toString(16).padStart(2,'0')};`);
+        }));
 
-        const sBtn = document.createElement('div');
-        sBtn.className = `xp-btn ${pst === actualIdx ? 'active' : ''}`;
-        sBtn.innerHTML = `<span class="xp-num">${actualIdx + 1}</span><span class="xp-name">${name}</span>`;
-        sBtn.onclick = () => { pst = actualIdx; renderBuses(); sendCmd(`DTH:002101,${actualIdx.toString(16).padStart(2,'0')};`); };
-        sGrid.appendChild(sBtn);
+        sGrid.appendChild(makeXpBtn(buttonNum, physicalName, slotName, pst === actual, () => {
+          pst = actual; renderBuses();
+          sendCmd(`DTH:002101,${actual.toString(16).padStart(2,'0')};`);
+        }));
+
+        aGrid.appendChild(makeXpBtn(buttonNum, physicalName, slotName, aux === actual, () => {
+          aux = actual; renderBuses();
+          sendCmd(`DTH:000011,${actual.toString(16).padStart(2,'0')};`);
+        }));
       }
     }
 
-    // FIXED T-BAR LOGIC: 0% at bottom, 100% at top
+    function makeXpBtn(num, name, slot, active, onClick) {
+      const b = document.createElement('div');
+      b.className = `xp-btn ${active ? 'active' : ''}`;
+      b.innerHTML = `
+        <span class="xp-num">${num}</span>
+        <span class="xp-name">${name}</span>
+        <span class="xp-sub">[${slot}]</span>
+      `;
+      b.onclick = onClick;
+      return b;
+    }
+
+    // T-BAR: 0% BOTTOM -> 100% TOP
     function setupTbar() {
       const track = document.getElementById('tbarTrack');
       const handle = document.getElementById('tbarHandle');
       const progress = document.getElementById('tbarProgress');
       let dragging = false;
-      const travel = 240 - 38; // 202px travel distance
+      const travel = 240 - 38;
 
       function update(clientY) {
         const rect = track.getBoundingClientRect();
-        // Distance from bottom of track to touch/mouse:
         const yFromBottom = rect.bottom - clientY - 19;
         const ratio = Math.max(0, Math.min(1, yFromBottom / travel));
         const pos = Math.round(ratio * 2047);
@@ -213,26 +499,36 @@
       handle.addEventListener('mousedown', () => dragging = true);
       window.addEventListener('mousemove', (e) => { if (dragging) update(e.clientY); });
       window.addEventListener('mouseup', () => dragging = false);
+
+      handle.addEventListener('touchstart', () => dragging = true);
+      window.addEventListener('touchmove', (e) => { if (dragging && e.touches[0]) update(e.touches[0].clientY); });
+      window.addEventListener('touchend', () => dragging = false);
     }
 
     function executeCut() {
+      const b = document.getElementById('cutBtn');
+      b.classList.add('flashing');
+      setTimeout(() => b.classList.remove('flashing'), 100);
       sendCmd('DTH:0B001E,01;');
-      setTimeout(() => sendCmd('DTH:0B001E,00;'), 50);
+      setTimeout(() => sendCmd('DTH:0B001E,00;'), 40);
       const temp = pgm; pgm = pst; pst = temp;
       renderBuses();
     }
 
     function executeAuto() {
+      const b = document.getElementById('autoBtn');
+      b.classList.add('active');
       sendCmd('DTH:0B001F,01;');
-      setTimeout(() => sendCmd('DTH:0B001F,00;'), 50);
+      setTimeout(() => sendCmd('DTH:0B001F,00;'), 40);
+
       const handle = document.getElementById('tbarHandle');
       const progress = document.getElementById('tbarProgress');
       const travel = 240 - 38;
       let start = null;
 
-      function step(timestamp) {
-        if (!start) start = timestamp;
-        const p = Math.min((timestamp - start) / 1000, 1);
+      function step(now) {
+        if (!start) start = now;
+        const p = Math.min((now - start) / 1000, 1);
         handle.style.bottom = `${p * travel}px`;
         progress.style.height = `${p * 100}%`;
         document.getElementById('tbarPosText').innerText = `${Math.round(p * 100)}%`;
@@ -240,62 +536,449 @@
         if (p < 1) {
           requestAnimationFrame(step);
         } else {
+          b.classList.remove('active');
           const temp = pgm; pgm = pst; pst = temp;
           renderBuses();
           setTimeout(() => {
             handle.style.bottom = '0px';
             progress.style.height = '0%';
             document.getElementById('tbarPosText').innerText = '0%';
-          }, 150);
+          }, 100);
         }
       }
       requestAnimationFrame(step);
     }
 
-    function updateMasterAudio(val) {
-      const v = parseInt(val, 10);
-      const db = v >= 80 ? `+${((v - 80) / 2).toFixed(1)} dB` : `-${((80 - v) * 0.8).toFixed(1)} dB`;
-      document.getElementById('masterDbText').innerText = v === 0 ? '-∞ dB' : db;
-      sendCmd(`DTH:012100,${v.toString(16).padStart(2,'0')};`);
+    function setTransTime(val) {
+      document.getElementById('transTimeText').innerText = `${(val / 10).toFixed(1)}s`;
+      sendCmd(`DTH:001700,${parseInt(val, 10).toString(16).padStart(2,'0')};`);
     }
 
+    function setMixType(val) {
+      sendCmd(`DTH:001800,${parseInt(val, 10).toString(16).padStart(2,'0')};`);
+    }
+
+    function toggleFTB() {
+      ftbActive = !ftbActive;
+      const b = document.getElementById('ftbBtn');
+      b.style.background = ftbActive ? '#ef4444' : '#261b1f';
+      b.style.color = ftbActive ? '#fff' : '#ef4444';
+      sendCmd('DTH:0B004E,01;');
+      setTimeout(() => sendCmd('DTH:0B004E,00;'), 40);
+    }
+
+    function toggleFreeze() {
+      freezeActive = !freezeActive;
+      document.getElementById('qFreeze').innerText = `FREEZE: ${freezeActive ? 'ON' : 'OFF'}`;
+      document.getElementById('qFreeze').classList.toggle('pvw-active', freezeActive);
+      sendCmd(`DTH:020500,${freezeActive ? '01' : '00'};`);
+    }
+
+    // AUDIO MIXER (ZERO JITTER)
+    function renderAudio() {
+      const container = document.getElementById('audioStrips');
+      container.innerHTML = '';
+      const chs = [
+        { id: '1', name: 'MIC 1' }, { id: '2', name: 'MIC 2' },
+        { id: '3', name: 'LINE 3/4' }, { id: '4', name: 'USB IN' },
+        { id: '5', name: 'BT IN' }, { id: '6', name: 'HDMI 1' },
+        { id: '7', name: 'HDMI 2' }, { id: '8', name: 'SDI 1' },
+        { id: 'master', name: 'MASTER OUT', isMaster: true }
+      ];
+
+      chs.forEach(c => {
+        const strip = document.createElement('div');
+        strip.className = `audio-channel ${c.isMaster ? 'master' : ''}`;
+        strip.innerHTML = `
+          <div style="font-size:0.75rem; font-weight:800; text-align:center;">${c.name}</div>
+          <div class="fader-box">
+            <input type="range" class="fader-vertical" min="0" max="100" value="80" oninput="setAudioVal('${c.id}', this.value, '${c.isMaster}')">
+            <div class="db-scale">
+              <span style="color:#ef4444;">+10</span>
+              <span>+6</span>
+              <span class="unity">0</span>
+              <span>-6</span>
+              <span>-12</span>
+              <span>-20</span>
+              <span>-40</span>
+              <span>-∞</span>
+            </div>
+          </div>
+          <div id="dbTxt_${c.id}" style="font-size:0.75rem; font-weight:700;">0.0 dB</div>
+          <button id="mute_${c.id}" class="btn" style="width:100%; padding:3px; font-size:0.7rem;" onclick="toggleMute('${c.id}')">MUTE</button>
+        `;
+        container.appendChild(strip);
+      });
+    }
+
+    function setAudioVal(id, v, isMaster) {
+      const val = parseInt(v, 10);
+      const db = val >= 80 ? `+${((val - 80) / 2).toFixed(1)} dB` : `-${((80 - val) * 0.8).toFixed(1)} dB`;
+      document.getElementById(`dbTxt_${id}`).innerText = val === 0 ? '-∞ dB' : db;
+      if (isMaster === 'true') {
+        sendCmd(`DTH:012100,${val.toString(16).padStart(2,'0')};`);
+      }
+    }
+
+    function toggleMute(id) {
+      const b = document.getElementById(`mute_${id}`);
+      b.classList.toggle('btn-danger');
+      if (id === 'master') {
+        const isMuted = b.classList.contains('btn-danger');
+        sendCmd(`DTH:012103,${isMuted ? '01' : '00'};`);
+      }
+    }
+
+    // LAYERS & PRESETS
+    function renderLayers() {
+      const pGrid = document.getElementById('pinpGrid');
+      pGrid.innerHTML = '';
+      for (let i = 1; i <= 4; i++) {
+        pGrid.innerHTML += `
+          <div class="layer-card">
+            <div style="font-weight:800; font-size:0.8rem; margin-bottom:6px;">PinP & KEY ${i}</div>
+            <div style="display:flex; gap:6px;">
+              <button class="toggle-btn" onclick="togglePinpLayer(${i}, 'pvw')">PVW</button>
+              <button class="toggle-btn" id="pinpPgm_${i}" onclick="togglePinpLayer(${i}, 'pgm')">PGM</button>
+            </div>
+          </div>
+        `;
+      }
+
+      const dGrid = document.getElementById('dskGrid');
+      dGrid.innerHTML = '';
+      for (let i = 1; i <= 2; i++) {
+        dGrid.innerHTML += `
+          <div class="layer-card">
+            <div style="font-weight:800; font-size:0.8rem; margin-bottom:6px; color:#f59e0b;">DSK ${i}</div>
+            <div style="display:flex; gap:6px;">
+              <button class="toggle-btn" onclick="toggleDskLayer(${i}, 'pvw')">PVW</button>
+              <button class="toggle-btn" id="dskPgm_${i}" onclick="toggleDskLayer(${i}, 'pgm')">PGM</button>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function renderPresets() {
+      const mGrid = document.getElementById('memGrid');
+      mGrid.innerHTML = '';
+      for (let i = 0; i < 30; i++) {
+        const b = document.createElement('div');
+        b.className = `preset-btn ${activePreset === i ? 'active-mem' : ''}`;
+        b.id = `memBtn_${i}`;
+        b.innerHTML = `<div style="font-size:1.1rem; font-weight:900;">${i + 1}</div><div style="font-size:0.65rem; color:#94a3b8;">MEM ${i + 1}</div>`;
+        b.onclick = () => {
+          activePreset = i;
+          document.getElementById('activeMemDisplay').innerText = `Current: Memory ${i + 1}`;
+          document.querySelectorAll('.preset-btn').forEach(el => el.classList.remove('active-mem'));
+          b.classList.add('active-mem');
+          sendCmd(`DTH:0A0000,${i.toString(16).padStart(2,'0')};`);
+        };
+        mGrid.appendChild(b);
+      }
+
+      const macGrid = document.getElementById('macroGrid');
+      macGrid.innerHTML = '';
+      for (let i = 1; i <= 20; i++) {
+        macGrid.innerHTML += `
+          <div class="preset-btn" onclick="sendCmd('DTH:500504,${(i-1).toString(16).padStart(2,'0')};')">
+            <div style="font-size:1rem; font-weight:900; color:#38bdf8;">M${i}</div>
+            <div style="font-size:0.65rem; color:#94a3b8;">MACRO ${i}</div>
+          </div>
+        `;
+      }
+    }
+
+    function renderMatrix() {
+      const g = document.getElementById('matrixGrid');
+      g.innerHTML = '';
+      const outs = [
+        { label: 'HDMI OUT 1', addr: '00000A' }, { label: 'HDMI OUT 2', addr: '00000B' },
+        { label: 'HDMI OUT 3', addr: '00000C' }, { label: 'SDI OUT 1',  addr: '00000D' },
+        { label: 'SDI OUT 2',  addr: '00000E' }, { label: 'SDI OUT 3',  addr: '00000F' }
+      ];
+      outs.forEach(o => {
+        g.innerHTML += `
+          <div class="layer-card">
+            <div style="font-weight:800; font-size:0.8rem; margin-bottom:6px;">${o.label}</div>
+            <select style="width:100%; background:#090a0d; color:#fff; border:1px solid #333a4a; padding:4px;" onchange="sendCmd('DTH:${o.addr},' + parseInt(this.value,10).toString(16).padStart(2,'0') + ';')">
+              ${outNames.map((n, idx) => `<option value="${idx}">${n}</option>`).join('')}
+            </select>
+          </div>
+        `;
+      });
+    }
+
+    function ptzMove(dir) {
+      logMsg('tx', `PTZ CAM ${activeCam} -> ${dir}`);
+      const c = (0x41 + (activeCam - 1)).toString(16).toUpperCase();
+      if (dir === 'LEFT')  sendCmd(`DTH:02${c}22,7F;`);
+      if (dir === 'RIGHT') sendCmd(`DTH:02${c}22,01;`);
+      if (dir === 'UP')    sendCmd(`DTH:02${c}23,01;`);
+      if (dir === 'DOWN')  sendCmd(`DTH:02${c}23,7F;`);
+      if (dir === 'STOP') { sendCmd(`DTH:02${c}22,00;`); sendCmd(`DTH:02${c}23,00;`); }
+      if (dir === 'HOME')  sendCmd(`DTH:0D0${activeCam - 1}02,01;`);
+    }
+
+    function ptzPreset(num) {
+      sendCmd(`DTH:0D${(activeCam - 1).toString(16).padStart(2,'0')}00,${(num - 1).toString(16).padStart(2,'0')};`);
+    }
+
+    function togglePinp(idx) {
+      sendCmd(`DTH:0B00${(0x2F + (idx - 1) * 5).toString(16).toUpperCase()},01;`);
+      setTimeout(() => sendCmd(`DTH:0B00${(0x2F + (idx - 1) * 5).toString(16).toUpperCase()},00;`), 40);
+    }
+
+    function toggleDsk(idx) {
+      sendCmd(`DTH:0B00${(0x43 + (idx - 1) * 3).toString(16).toUpperCase()},01;`);
+      setTimeout(() => sendCmd(`DTH:0B00${(0x43 + (idx - 1) * 3).toString(16).toUpperCase()},00;`), 40);
+    }
+
+    function togglePinpLayer(idx, bus) {
+      const base = (0x1B + (idx - 1)).toString(16).toUpperCase();
+      sendCmd(`DTH:00${base}${bus === 'pgm' ? '00' : '01'},01;`);
+    }
+
+    function toggleDskLayer(idx, bus) {
+      const base = (0x1F + (idx - 1)).toString(16).toUpperCase();
+      sendCmd(`DTH:00${base}${bus === 'pgm' ? '00' : '01'},01;`);
+    }
+
+    // Sends comprehensive queries for bank assignments
     function syncBankFromSwitcher() {
-      sendCmd('RQH:000000,00000A;');
-      sendCmd('RQH:000024,00000A;');
+      // 1. Multi-byte bulk queries
+      sendCmd('RQH:000000,00000A;'); // Bank 1 (Inputs 1-10)
+      sendCmd('RQH:000024,00000A;'); // Bank 2 (Inputs 11-20)
+      
+      // 2. Individual address queries to ensure 100% compatibility across all firmwares
+      for (let i = 0; i < 10; i++) {
+        sendCmd(`RQH:0000${i.toString(16).padStart(2, '0')},000001;`);
+        sendCmd(`RQH:0000${(0x24 + i).toString(16).padStart(2, '0')},000001;`);
+      }
+      logMsg('sys', 'Requesting physical input bank mapping from V-160HD...');
+    }
+
+    /* =========================================================================
+       ROBUST HEX STREAM PARSER & REAL-TIME HARDWARE SYNC
+       ========================================================================= */
+
+    function parseHexBytes(str) {
+      const s = str.trim().replace(/;/g, '');
+      if (s.includes(',')) {
+        return s.split(',').filter(x => x.trim().length > 0).map(x => parseInt(x, 16));
+      } else if (s.length >= 2 && s.length % 2 === 0) {
+        const out = [];
+        for (let i = 0; i < s.length; i += 2) {
+          out.push(parseInt(s.substr(i, 2), 16));
+        }
+        return out;
+      } else if (s.length > 0) {
+        return [parseInt(s, 16)];
+      }
+      return [];
+    }
+
+    function formatRolandLabel(val) {
+      if (val <= 0x07) return `HDMI ${val + 1}`;
+      if (val <= 0x0F) return `SDI ${val - 0x08 + 1}`;
+      if (val <= 0x1F) return `STILL ${val - 0x10 + 1}`;
+      if (val === 0x20) return "N/A";
+      return `IN ${val + 1}`;
+    }
+
+    function handleIncoming(raw) {
+      const line = raw.trim();
+      if (!line) return;
+      logMsg('rx', line);
+
+      if (line.startsWith('DTH:')) {
+        const clean = line.replace('DTH:', '').replace(';', '');
+        const commaIdx = clean.indexOf(',');
+        if (commaIdx < 0) return;
+
+        const addr = clean.substring(0, commaIdx).toUpperCase();
+        const payloadStr = clean.substring(commaIdx + 1);
+        const bytes = parseHexBytes(payloadStr);
+
+        // 1. Crosspoint PGM / PST live status
+        if (addr === '002100') {
+          if (bytes.length >= 2) {
+            pgm = bytes[0];
+            pst = bytes[1];
+          } else if (bytes.length === 1) {
+            pgm = bytes[0];
+          }
+          renderBuses();
+        } else if (addr === '002101') {
+          if (bytes.length >= 1) pst = bytes[0];
+          renderBuses();
+        }
+        // 2. Currently loaded Scene Memory on Roland hardware
+        else if (addr === '0A0003') {
+          if (bytes.length >= 1) {
+            activePreset = bytes[0];
+            document.getElementById('activeMemDisplay').innerText = `Current: Memory ${activePreset + 1}`;
+            document.querySelectorAll('.preset-btn').forEach(el => el.classList.remove('active-mem'));
+            const btn = document.getElementById(`memBtn_${activePreset}`);
+            if (btn) btn.classList.add('active-mem');
+          }
+        }
+        // 3. Bank 1 Assignment block (Inputs 1-10)
+        else if (addr === '000000') {
+          for (let i = 0; i < bytes.length && i < 10; i++) {
+            inputLabels[i] = formatRolandLabel(bytes[i]);
+          }
+          renderBuses();
+        }
+        // 4. Bank 2 Assignment block (Inputs 11-20)
+        else if (addr === '000024') {
+          for (let i = 0; i < bytes.length && i < 10; i++) {
+            inputLabels[10 + i] = formatRolandLabel(bytes[i]);
+          }
+          renderBuses();
+        }
+        // 5. Single-byte address queries (000000-000009 and 000024-00002D)
+        else {
+          const addrNum = parseInt(addr, 16);
+          if (addrNum >= 0x000000 && addrNum <= 0x000009) {
+            inputLabels[addrNum - 0x000000] = formatRolandLabel(bytes[0]);
+            renderBuses();
+          } else if (addrNum >= 0x000024 && addrNum <= 0x00002D) {
+            inputLabels[10 + (addrNum - 0x000024)] = formatRolandLabel(bytes[0]);
+            renderBuses();
+          } else if (addr === '020500') {
+            freezeActive = (bytes[0] === 1);
+            document.getElementById('qFreeze').innerText = `FREEZE: ${freezeActive ? 'ON' : 'OFF'}`;
+            document.getElementById('qFreeze').classList.toggle('pvw-active', freezeActive);
+          }
+        }
+      }
+    }
+
+    // High-speed polling loop for live hardware state
+    function startHardwareSyncLoop() {
+      if (syncTimer) clearInterval(syncTimer);
+      syncTimer = setInterval(() => {
+        if (!isConnected) return;
+        sendCmd('RQH:002100,000002;'); // PGM + PST select
+        sendCmd('RQH:0A0003,000001;'); // Active scene memory
+      }, 350);
     }
 
     function sendCmd(cmd) {
+      const formatted = cmd.endsWith(';') ? cmd + '\n' : cmd + ';\n';
+      logMsg('tx', cmd.trim());
+
+      // 1. Android Native TCP
       if (window.NativeTCP) {
-        window.NativeTCP.send(cmd); // Android app hook
+        window.NativeTCP.send(formatted);
         return;
       }
+
+      // 2. Windows C# Desktop App direct HTTP/TCP gateway
+      if (window.location.port === "18023") {
+        fetch('/api/send', { method: 'POST', body: formatted }).catch(() => {});
+        return;
+      }
+
+      // 3. WebSocket bridge
       if (ws && ws.readyState === WebSocket.OPEN) {
-        ws.send(cmd + '\n');
+        ws.send(formatted);
       }
     }
 
+    function autoConnectDesktopApp() {
+      fetch('/api/connect', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ip: document.getElementById('hostInput').value,
+          port: parseInt(document.getElementById('portInput').value, 10),
+          pin: document.getElementById('pinInput').value
+        })
+      }).then(res => res.json()).then(data => {
+        if (data.status === 'ok') {
+          setConnectedUI(true);
+          sseSource = new EventSource('/api/events');
+          sseSource.onmessage = (e) => handleIncoming(e.data);
+          sendCmd('DTH:0C0100,01;'); // Enable Tally Auto-Send
+          syncBankFromSwitcher();
+          startHardwareSyncLoop();
+        }
+      });
+    }
+
     function toggleConnection() {
-      if (ws) { ws.close(); ws = null; return; }
+      if (isConnected) {
+        disconnect();
+        return;
+      }
+
+      if (window.location.port === "18023") {
+        autoConnectDesktopApp();
+        return;
+      }
+
       const host = document.getElementById('hostInput').value;
       const port = document.getElementById('portInput').value;
       const pin = document.getElementById('pinInput').value;
-      
       ws = new WebSocket(`ws://${host}:${port}`);
+
       ws.onopen = () => {
-        document.getElementById('statusText').innerText = 'ONLINE';
-        document.getElementById('statusText').style.color = '#34d399';
-        document.getElementById('connectBtn').innerText = 'Disconnect';
-        document.getElementById('connectBtn').className = 'btn btn-danger';
+        setConnectedUI(true);
         if (pin) ws.send(pin + '\n');
+        sendCmd('DTH:0C0100,01;');
         sendCmd('VER;');
         syncBankFromSwitcher();
+        startHardwareSyncLoop();
       };
-      ws.onclose = () => {
-        document.getElementById('statusText').innerText = 'DISCONNECTED';
-        document.getElementById('statusText').style.color = '#94a3b8';
-        document.getElementById('connectBtn').innerText = 'Connect';
-        document.getElementById('connectBtn').className = 'btn btn-primary';
-      };
+      ws.onmessage = (e) => handleIncoming(e.data);
+      ws.onclose = () => disconnect();
+      ws.onerror = () => disconnect();
+    }
+
+    function setConnectedUI(online) {
+      isConnected = online;
+      const badge = document.getElementById('statusBadge');
+      const text = document.getElementById('statusText');
+      const btn = document.getElementById('connectBtn');
+      if (online) {
+        badge.className = 'status-badge status-online';
+        text.innerText = 'ONLINE (PORT 8023)';
+        btn.innerText = 'Disconnect';
+        btn.className = 'btn btn-danger';
+      } else {
+        badge.className = 'status-badge status-offline';
+        text.innerText = 'DISCONNECTED';
+        btn.innerText = 'Connect';
+        btn.className = 'btn btn-primary';
+      }
+    }
+
+    function disconnect() {
+      setConnectedUI(false);
+      if (syncTimer) { clearInterval(syncTimer); syncTimer = null; }
+      if (ws) { ws.close(); ws = null; }
+      if (sseSource) { sseSource.close(); sseSource = null; }
+    }
+
+    function logMsg(type, msg) {
+      const logs = document.getElementById('termLogs');
+      const line = document.createElement('div');
+      const time = new Date().toTimeString().split(' ')[0];
+      line.className = `log-${type}`;
+      line.innerText = `[${time}] ${type.toUpperCase()}: ${msg}`;
+      logs.appendChild(line);
+      logs.scrollTop = logs.scrollHeight;
+    }
+
+    function sendRawCmd() {
+      const input = document.getElementById('rawCmdInput');
+      if (input.value.trim()) {
+        sendCmd(input.value.trim());
+        input.value = '';
+      }
     }
   </script>
 </body>
