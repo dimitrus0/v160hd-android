@@ -35,7 +35,7 @@
     
     .conn-bar { display: flex; align-items: center; gap: 8px; background: var(--bg-panel); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border-color); flex-wrap: wrap; }
     .conn-bar label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
-    .conn-bar input, .conn-bar select { background: #0f1115; border: 1px solid var(--border-color); color: #fff; padding: 4px 8px; border-radius: 4px; font-family: monospace; font-size: 0.85rem; }
+    .conn-bar input { background: #0f1115; border: 1px solid var(--border-color); color: #fff; padding: 4px 8px; border-radius: 4px; font-family: monospace; font-size: 0.85rem; }
     .conn-bar input[type="text"] { width: 120px; }
     .conn-bar input[type="number"] { width: 65px; }
 
@@ -127,7 +127,7 @@
     .btn-auto { background: #1d4ed8; color: white; height: 55px; font-size: 1.1rem; font-weight: 900; border: none; border-radius: 6px; cursor: pointer; }
     .btn-auto.active { background: #3b82f6; box-shadow: 0 0 20px #3b82f6; }
 
-    /* CALIBRATED AUDIO (ZERO JITTER) */
+    /* CALIBRATED AUDIO */
     .audio-strip-container { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 12px; }
     .audio-channel { background: #161920; border: 1px solid var(--border-color); border-radius: 8px; width: 105px; flex-shrink: 0; padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
     .audio-channel.master { background: #1e1b2e; border-color: #6366f1; }
@@ -136,12 +136,12 @@
     .db-scale { display: flex; flex-direction: column; justify-content: space-between; height: 170px; font-family: monospace; font-size: 0.68rem; color: #64748b; font-weight: 700; }
     .db-scale span.unity { color: #10b981; }
 
-    /* CARDS & DPAD */
+    /* CARDS & TOGGLES */
     .layers-grid, .preset-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
     .layer-card { background: #15181f; border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; }
     .toggle-btn { flex: 1; padding: 6px 4px; border-radius: 4px; border: 1px solid var(--border-color); background: #20242e; color: #94a3b8; font-size: 0.75rem; font-weight: 800; cursor: pointer; text-align: center; }
-    .toggle-btn.pvw-active { background: #047857; color: white; border-color: #34d399; }
-    .toggle-btn.pgm-active { background: #b91c1c; color: white; border-color: #f87171; }
+    .toggle-btn.pvw-active { background: #047857; color: white; border-color: #34d399; box-shadow: 0 0 10px rgba(52,211,153,0.5); }
+    .toggle-btn.pgm-active { background: #b91c1c; color: white; border-color: #f87171; box-shadow: 0 0 10px rgba(248,113,113,0.5); }
 
     .preset-btn { background: #1c202a; border: 1px solid #333a4a; border-radius: 6px; padding: 12px 8px; text-align: center; cursor: pointer; }
     .preset-btn.active-mem { background: #1e3a8a; border-color: #60a5fa; box-shadow: 0 0 12px rgba(96,165,250,0.4); }
@@ -162,13 +162,7 @@
     </div>
 
     <div class="conn-bar">
-      <label>Mode</label>
-      <select id="connModeSelect" onchange="handleModeChange()">
-        <option value="direct">Native App (TCP 8023)</option>
-        <option value="ws">WebSocket Bridge</option>
-      </select>
-
-      <label>Switcher IP</label>
+      <label>IP</label>
       <input type="text" id="hostInput" value="192.168.1.100">
       <label>Port</label>
       <input type="number" id="portInput" value="8023">
@@ -208,7 +202,7 @@
               <button id="b2" class="btn" onclick="setBank(2)">Bank 2 (11–20)</button>
             </div>
             <div style="font-size: 0.8rem; color: #94a3b8;">
-              <span id="syncIndicator">⚡ Auto-Sync Active</span> | Inputs <strong id="bankRangeText">1 – 10</strong>
+              <span id="syncIndicator">⚡ Real-Time Hardware Sync</span> | Inputs <strong id="bankRangeText">1 – 10</strong>
             </div>
           </div>
 
@@ -230,22 +224,22 @@
             <div class="crosspoint-grid" id="auxGrid"></div>
           </div>
 
-          <!-- QUICK DOCK -->
+          <!-- QUICK DOCK: FIXED PGM ON/OFF TOGGLES -->
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
             <div class="panel-box" style="margin-bottom:0;">
-              <div class="panel-title" style="margin-bottom: 8px;">PinP Quick Status</div>
+              <div class="panel-title" style="margin-bottom: 8px;">PinP Quick Status (PGM On/Off)</div>
               <div style="display:flex; gap:6px;">
-                <button id="qPinp1" class="toggle-btn" onclick="togglePinp(1)">PinP 1: OFF</button>
-                <button id="qPinp2" class="toggle-btn" onclick="togglePinp(2)">PinP 2: OFF</button>
-                <button id="qPinp3" class="toggle-btn" onclick="togglePinp(3)">PinP 3: OFF</button>
-                <button id="qPinp4" class="toggle-btn" onclick="togglePinp(4)">PinP 4: OFF</button>
+                <button id="qPinp1" class="toggle-btn" onclick="togglePinpLayer(1, 'pgm')">PinP 1: OFF</button>
+                <button id="qPinp2" class="toggle-btn" onclick="togglePinpLayer(2, 'pgm')">PinP 2: OFF</button>
+                <button id="qPinp3" class="toggle-btn" onclick="togglePinpLayer(3, 'pgm')">PinP 3: OFF</button>
+                <button id="qPinp4" class="toggle-btn" onclick="togglePinpLayer(4, 'pgm')">PinP 4: OFF</button>
               </div>
             </div>
             <div class="panel-box" style="margin-bottom:0;">
               <div class="panel-title" style="margin-bottom: 8px;">DSK & Freeze Quick Status</div>
               <div style="display:flex; gap:6px;">
-                <button id="qDsk1" class="toggle-btn" onclick="toggleDsk(1)">DSK 1: OFF</button>
-                <button id="qDsk2" class="toggle-btn" onclick="toggleDsk(2)">DSK 2: OFF</button>
+                <button id="qDsk1" class="toggle-btn" onclick="toggleDskLayer(1, 'pgm')">DSK 1: OFF</button>
+                <button id="qDsk2" class="toggle-btn" onclick="toggleDskLayer(2, 'pgm')">DSK 2: OFF</button>
                 <button id="qFreeze" class="toggle-btn" onclick="toggleFreeze()">FREEZE: OFF</button>
               </div>
             </div>
@@ -300,7 +294,7 @@
       </div>
     </div>
 
-    <!-- TAB 3: AUDIO MIXER (CALIBRATED, ZERO JITTER) -->
+    <!-- TAB 3: AUDIO MIXER -->
     <div id="audioTab" class="tab-content">
       <div class="panel-box">
         <div class="panel-header">
@@ -382,14 +376,28 @@
   </main>
 
   <script>
-    // 1. Initialize with Roland V-160HD official hardware factory mapping
+    // 1. Initialized with Roland V-160HD hardware factory mapping (Ref: Manual p. 88)
     const inputLabels = [
-      "HDMI 1", "HDMI 2", "HDMI 3", "HDMI 4", "HDMI 5", "HDMI 6", "HDMI 7", "HDMI 8", "SDI 1", "SDI 2",
-      "SDI 3",  "SDI 4",  "SDI 5",  "SDI 6",  "SDI 7",  "SDI 8",  "STILL 1", "STILL 2", "STILL 3", "STILL 4"
+      "HDMI 1", "HDMI 2", "HDMI 3", "HDMI 4", "HDMI 5", "HDMI 6", "HDMI 7", "HDMI 8", "STILL 1", "STILL 2",
+      "SDI 1",  "SDI 2",  "SDI 3",  "SDI 4",  "SDI 5",  "SDI 6",  "SDI 7",  "SDI 8",  "STILL 1", "STILL 2"
     ];
 
     const outNames = ["PROGRAM", "SUB PROGRAM", "PREVIEW", "AUX 1", "AUX 2", "AUX 3", "DSK 1 SRC", "DSK 2 SRC", "MULTI-VIEW", "16 INPUT-VIEW", "16 STILL-VIEW"];
     
+    // Layer States (True toggle management)
+    const layers = {
+      pinp: {
+        1: { pgm: false, pvw: false },
+        2: { pgm: false, pvw: false },
+        3: { pgm: false, pvw: false },
+        4: { pgm: false, pvw: false }
+      },
+      dsk: {
+        1: { pgm: false, pvw: false },
+        2: { pgm: false, pvw: false }
+      }
+    };
+
     let currentBank = 1;
     let pgm = 0, pst = 1, aux = 2;
     let activePreset = 0;
@@ -408,9 +416,8 @@
       renderMatrix();
       setupTbar();
 
-      // Check if running inside Windows C# Desktop App (Port 18023)
+      // Check if launched by Windows C# Desktop App
       if (window.location.port === "18023") {
-        document.getElementById('connModeSelect').value = "direct";
         autoConnectDesktopApp();
       }
     });
@@ -430,7 +437,7 @@
       renderBuses();
     }
 
-    // 3-Tier Crosspoint button rendering
+    // 3-Tier Crosspoint button rendering: [Key #] + [Physical Input] + [Slot]
     function renderBuses() {
       const pGrid = document.getElementById('pgmGrid');
       const sGrid = document.getElementById('pstGrid');
@@ -569,9 +576,64 @@
 
     function toggleFreeze() {
       freezeActive = !freezeActive;
-      document.getElementById('qFreeze').innerText = `FREEZE: ${freezeActive ? 'ON' : 'OFF'}`;
-      document.getElementById('qFreeze').classList.toggle('pvw-active', freezeActive);
+      updateFreezeUI();
       sendCmd(`DTH:020500,${freezeActive ? '01' : '00'};`);
+    }
+
+    function updateFreezeUI() {
+      const b = document.getElementById('qFreeze');
+      if (b) {
+        b.innerText = `FREEZE: ${freezeActive ? 'ON' : 'OFF'}`;
+        b.classList.toggle('pvw-active', freezeActive);
+      }
+    }
+
+    // PINP & DSK PROPER TOGGLE (TRUE ON/OFF CYCLING)
+    function togglePinpLayer(idx, bus) {
+      const newState = !layers.pinp[idx][bus];
+      layers.pinp[idx][bus] = newState;
+      updateLayerUI();
+
+      const base = (0x1B + (idx - 1)).toString(16).toUpperCase();
+      const sub = (bus === 'pgm') ? '00' : '01';
+      sendCmd(`DTH:00${base}${sub},${newState ? '01' : '00'};`);
+    }
+
+    function toggleDskLayer(idx, bus) {
+      const newState = !layers.dsk[idx][bus];
+      layers.dsk[idx][bus] = newState;
+      updateLayerUI();
+
+      const base = (0x1F + (idx - 1)).toString(16).toUpperCase();
+      const sub = (bus === 'pgm') ? '00' : '01';
+      sendCmd(`DTH:00${base}${sub},${newState ? '01' : '00'};`);
+    }
+
+    function updateLayerUI() {
+      // 1. Update Quick Dock buttons
+      for (let i = 1; i <= 4; i++) {
+        const b = document.getElementById(`qPinp${i}`);
+        if (b) {
+          b.innerText = `PinP ${i}: ${layers.pinp[i].pgm ? 'ON AIR' : 'OFF'}`;
+          b.classList.toggle('pgm-active', layers.pinp[i].pgm);
+        }
+        const tabPgm = document.getElementById(`pinpPgm_${i}`);
+        if (tabPgm) tabPgm.classList.toggle('pgm-active', layers.pinp[i].pgm);
+        const tabPvw = document.getElementById(`pinpPvw_${i}`);
+        if (tabPvw) tabPvw.classList.toggle('pvw-active', layers.pinp[i].pvw);
+      }
+
+      for (let i = 1; i <= 2; i++) {
+        const b = document.getElementById(`qDsk${i}`);
+        if (b) {
+          b.innerText = `DSK ${i}: ${layers.dsk[i].pgm ? 'ON AIR' : 'OFF'}`;
+          b.classList.toggle('pgm-active', layers.dsk[i].pgm);
+        }
+        const tabPgm = document.getElementById(`dskPgm_${i}`);
+        if (tabPgm) tabPgm.classList.toggle('pgm-active', layers.dsk[i].pgm);
+        const tabPvw = document.getElementById(`dskPvw_${i}`);
+        if (tabPvw) tabPvw.classList.toggle('pvw-active', layers.dsk[i].pvw);
+      }
     }
 
     // AUDIO MIXER (ZERO JITTER)
@@ -629,7 +691,6 @@
       }
     }
 
-    // LAYERS & PRESETS
     function renderLayers() {
       const pGrid = document.getElementById('pinpGrid');
       pGrid.innerHTML = '';
@@ -638,7 +699,7 @@
           <div class="layer-card">
             <div style="font-weight:800; font-size:0.8rem; margin-bottom:6px;">PinP & KEY ${i}</div>
             <div style="display:flex; gap:6px;">
-              <button class="toggle-btn" onclick="togglePinpLayer(${i}, 'pvw')">PVW</button>
+              <button class="toggle-btn" id="pinpPvw_${i}" onclick="togglePinpLayer(${i}, 'pvw')">PVW</button>
               <button class="toggle-btn" id="pinpPgm_${i}" onclick="togglePinpLayer(${i}, 'pgm')">PGM</button>
             </div>
           </div>
@@ -652,12 +713,13 @@
           <div class="layer-card">
             <div style="font-weight:800; font-size:0.8rem; margin-bottom:6px; color:#f59e0b;">DSK ${i}</div>
             <div style="display:flex; gap:6px;">
-              <button class="toggle-btn" onclick="toggleDskLayer(${i}, 'pvw')">PVW</button>
+              <button class="toggle-btn" id="dskPvw_${i}" onclick="toggleDskLayer(${i}, 'pvw')">PVW</button>
               <button class="toggle-btn" id="dskPgm_${i}" onclick="toggleDskLayer(${i}, 'pgm')">PGM</button>
             </div>
           </div>
         `;
       }
+      updateLayerUI();
     }
 
     function renderPresets() {
@@ -725,38 +787,17 @@
       sendCmd(`DTH:0D${(activeCam - 1).toString(16).padStart(2,'0')}00,${(num - 1).toString(16).padStart(2,'0')};`);
     }
 
-    function togglePinp(idx) {
-      sendCmd(`DTH:0B00${(0x2F + (idx - 1) * 5).toString(16).toUpperCase()},01;`);
-      setTimeout(() => sendCmd(`DTH:0B00${(0x2F + (idx - 1) * 5).toString(16).toUpperCase()},00;`), 40);
-    }
-
-    function toggleDsk(idx) {
-      sendCmd(`DTH:0B00${(0x43 + (idx - 1) * 3).toString(16).toUpperCase()},01;`);
-      setTimeout(() => sendCmd(`DTH:0B00${(0x43 + (idx - 1) * 3).toString(16).toUpperCase()},00;`), 40);
-    }
-
-    function togglePinpLayer(idx, bus) {
-      const base = (0x1B + (idx - 1)).toString(16).toUpperCase();
-      sendCmd(`DTH:00${base}${bus === 'pgm' ? '00' : '01'},01;`);
-    }
-
-    function toggleDskLayer(idx, bus) {
-      const base = (0x1F + (idx - 1)).toString(16).toUpperCase();
-      sendCmd(`DTH:00${base}${bus === 'pgm' ? '00' : '01'},01;`);
-    }
-
-    // Sends comprehensive queries for bank assignments
+    // 100% Robust Bank Sync: queries both bulk and single-byte addresses
     function syncBankFromSwitcher() {
-      // 1. Multi-byte bulk queries
-      sendCmd('RQH:000000,00000A;'); // Bank 1 (Inputs 1-10)
-      sendCmd('RQH:000024,00000A;'); // Bank 2 (Inputs 11-20)
-      
-      // 2. Individual address queries to ensure 100% compatibility across all firmwares
+      // 1. Single-byte queries (guaranteed support across all Roland firmwares)
       for (let i = 0; i < 10; i++) {
         sendCmd(`RQH:0000${i.toString(16).padStart(2, '0')},000001;`);
         sendCmd(`RQH:0000${(0x24 + i).toString(16).padStart(2, '0')},000001;`);
       }
-      logMsg('sys', 'Requesting physical input bank mapping from V-160HD...');
+      // 2. Multi-byte queries (for firmwares that support block retrieve)
+      sendCmd('RQH:000000,00000A;');
+      sendCmd('RQH:000024,00000A;');
+      logMsg('sys', 'Requesting input bank labels from V-160HD memory...');
     }
 
     /* =========================================================================
@@ -779,6 +820,7 @@
       return [];
     }
 
+    // Roland Reference Manual p. 88 parameter value converter
     function formatRolandLabel(val) {
       if (val <= 0x07) return `HDMI ${val + 1}`;
       if (val <= 0x0F) return `SDI ${val - 0x08 + 1}`;
@@ -814,7 +856,7 @@
           if (bytes.length >= 1) pst = bytes[0];
           renderBuses();
         }
-        // 2. Currently loaded Scene Memory on Roland hardware
+        // 2. Active Scene Memory
         else if (addr === '0A0003') {
           if (bytes.length >= 1) {
             activePreset = bytes[0];
@@ -824,21 +866,37 @@
             if (btn) btn.classList.add('active-mem');
           }
         }
-        // 3. Bank 1 Assignment block (Inputs 1-10)
+        // 3. PinP 1-4 & DSK 1-2 live status updates from Roland hardware
+        else if (addr === '001B00') { layers.pinp[1].pgm = (bytes[0] === 1); updateLayerUI(); }
+        else if (addr === '001B01') { layers.pinp[1].pvw = (bytes[0] === 1); updateLayerUI(); }
+        else if (addr === '001C00') { layers.pinp[2].pgm = (bytes[0] === 1); updateLayerUI(); }
+        else if (addr === '001C01') { layers.pinp[2].pvw = (bytes[0] === 1); updateLayerUI(); }
+        else if (addr === '001D00') { layers.pinp[3].pgm = (bytes[0] === 1); updateLayerUI(); }
+        else if (addr === '001D01') { layers.pinp[3].pvw = (bytes[0] === 1); updateLayerUI(); }
+        else if (addr === '001E00') { layers.pinp[4].pgm = (bytes[0] === 1); updateLayerUI(); }
+        else if (addr === '001E01') { layers.pinp[4].pvw = (bytes[0] === 1); updateLayerUI(); }
+        else if (addr === '001F00') { layers.dsk[1].pgm = (bytes[0] === 1); updateLayerUI(); }
+        else if (addr === '001F01') { layers.dsk[1].pvw = (bytes[0] === 1); updateLayerUI(); }
+        else if (addr === '002000') { layers.dsk[2].pgm = (bytes[0] === 1); updateLayerUI(); }
+        else if (addr === '002001') { layers.dsk[2].pvw = (bytes[0] === 1); updateLayerUI(); }
+        // 4. Freeze status
+        else if (addr === '020500') {
+          freezeActive = (bytes[0] === 1);
+          updateFreezeUI();
+        }
+        // 5. Multi-byte block bank updates
         else if (addr === '000000') {
           for (let i = 0; i < bytes.length && i < 10; i++) {
             inputLabels[i] = formatRolandLabel(bytes[i]);
           }
           renderBuses();
-        }
-        // 4. Bank 2 Assignment block (Inputs 11-20)
-        else if (addr === '000024') {
+        } else if (addr === '000024') {
           for (let i = 0; i < bytes.length && i < 10; i++) {
             inputLabels[10 + i] = formatRolandLabel(bytes[i]);
           }
           renderBuses();
         }
-        // 5. Single-byte address queries (000000-000009 and 000024-00002D)
+        // 6. Single-byte address queries (000000-000009 and 000024-00002D)
         else {
           const addrNum = parseInt(addr, 16);
           if (addrNum >= 0x000000 && addrNum <= 0x000009) {
@@ -847,22 +905,24 @@
           } else if (addrNum >= 0x000024 && addrNum <= 0x00002D) {
             inputLabels[10 + (addrNum - 0x000024)] = formatRolandLabel(bytes[0]);
             renderBuses();
-          } else if (addr === '020500') {
-            freezeActive = (bytes[0] === 1);
-            document.getElementById('qFreeze').innerText = `FREEZE: ${freezeActive ? 'ON' : 'OFF'}`;
-            document.getElementById('qFreeze').classList.toggle('pvw-active', freezeActive);
           }
         }
       }
     }
 
-    // High-speed polling loop for live hardware state
+    // High-speed polling loop for live hardware state (PGM/PST, Memories, PinP, DSK)
     function startHardwareSyncLoop() {
       if (syncTimer) clearInterval(syncTimer);
       syncTimer = setInterval(() => {
         if (!isConnected) return;
         sendCmd('RQH:002100,000002;'); // PGM + PST select
         sendCmd('RQH:0A0003,000001;'); // Active scene memory
+        sendCmd('RQH:001B00,000002;'); // PinP 1 PGM & PVW
+        sendCmd('RQH:001C00,000002;'); // PinP 2 PGM & PVW
+        sendCmd('RQH:001D00,000002;'); // PinP 3 PGM & PVW
+        sendCmd('RQH:001E00,000002;'); // PinP 4 PGM & PVW
+        sendCmd('RQH:001F00,000002;'); // DSK 1 PGM & PVW
+        sendCmd('RQH:002000,000002;'); // DSK 2 PGM & PVW
       }, 350);
     }
 
@@ -870,7 +930,7 @@
       const formatted = cmd.endsWith(';') ? cmd + '\n' : cmd + ';\n';
       logMsg('tx', cmd.trim());
 
-      // 1. Android Native TCP
+      // 1. Android Native TCP Socket
       if (window.NativeTCP) {
         window.NativeTCP.send(formatted);
         return;
@@ -909,22 +969,38 @@
       });
     }
 
+    function onAndroidConnected() {
+      setConnectedUI(true);
+      sendCmd('DTH:0C0100,01;'); // Enable Tally Auto-Send
+      syncBankFromSwitcher();
+      startHardwareSyncLoop();
+    }
+
     function toggleConnection() {
       if (isConnected) {
         disconnect();
         return;
       }
 
+      const host = document.getElementById('hostInput').value.trim();
+      const port = parseInt(document.getElementById('portInput').value.trim(), 10) || 8023;
+      const pin = document.getElementById('pinInput').value.trim();
+
+      // 1. Android Native TCP
+      if (window.NativeTCP) {
+        logMsg('sys', `Connecting via Android Native TCP to ${host}:${port}...`);
+        window.NativeTCP.connect(host, port, pin);
+        return;
+      }
+
+      // 2. Windows Desktop App
       if (window.location.port === "18023") {
         autoConnectDesktopApp();
         return;
       }
 
-      const host = document.getElementById('hostInput').value;
-      const port = document.getElementById('portInput').value;
-      const pin = document.getElementById('pinInput').value;
+      // 3. WebSocket Bridge
       ws = new WebSocket(`ws://${host}:${port}`);
-
       ws.onopen = () => {
         setConnectedUI(true);
         if (pin) ws.send(pin + '\n');
@@ -957,6 +1033,9 @@
     }
 
     function disconnect() {
+      if (window.NativeTCP) {
+        try { window.NativeTCP.disconnect(); } catch (_) {}
+      }
       setConnectedUI(false);
       if (syncTimer) { clearInterval(syncTimer); syncTimer = null; }
       if (ws) { ws.close(); ws = null; }
